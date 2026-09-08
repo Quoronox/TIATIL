@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://dn2ui7tkn7m7k"]
+
+[ext_resource type="Script" uid="uid://cdhxqylmn76is" path="res://entities/player/main/player.gd" id="1_ss6mo"]
+[ext_resource type="Script" uid="uid://ckyw8i7ly7cbl" path="res://entities/player/state_machine/finite_state_machine.gd" id="2_41haj"]
+[ext_resource type="Script" uid="uid://bdn5xh42ri6ul" path="res://entities/player/state_machine/base_state.gd" id="3_70fos"]
+[ext_resource type="Script" uid="uid://crcg4uhcaoku3" path="res://entities/player/state_machine/walk_state.gd" id="4_70fos"]
+[ext_resource type="Script" uid="uid://boafly1kdyf0j" path="res://entities/player/state_machine/idle_state.gd" id="5_3gwuk"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_d6hny"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0hc0"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_f0hc0"]
+height = 1.0
+
+[node name="Player" type="CharacterBody3D" unique_id=1420703360]
+script = ExtResource("1_ss6mo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1929477229]
+mesh = SubResource("CapsuleMesh_d6hny")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1030394811]
+shape = SubResource("CapsuleShape3D_f0hc0")
+
+[node name="FiniteStateMachine" type="Node" parent="." unique_id=2023674603 node_paths=PackedStringArray("state")]
+script = ExtResource("2_41haj")
+state = NodePath("BaseState")
+
+[node name="BaseState" type="Node" parent="FiniteStateMachine" unique_id=719929912]
+script = ExtResource("3_70fos")
+
+[node name="WalkState" type="Node" parent="FiniteStateMachine" unique_id=1780203096 node_paths=PackedStringArray("idle_state", "actor")]
+script = ExtResource("4_70fos")
+idle_state = NodePath("../IdleState")
+actor = NodePath("../..")
+
+[node name="IdleState" type="Node" parent="FiniteStateMachine" unique_id=261702867 node_paths=PackedStringArray("walk_state", "actor")]
+script = ExtResource("5_3gwuk")
+walk_state = NodePath("../WalkState")
+actor = NodePath("../..")
+
+[node name="CeilingCheckCast" type="ShapeCast3D" parent="." unique_id=161029446]
+shape = SubResource("CylinderShape3D_f0hc0")
+target_position = Vector3(0, 1, 0)
+
+[node name="Head" type="Node3D" parent="." unique_id=2028174227]
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1715539110]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2018630002]
