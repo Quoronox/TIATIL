@@ -5,18 +5,74 @@
 [ext_resource type="Script" uid="uid://bdn5xh42ri6ul" path="res://entities/player/state_machine/base_state.gd" id="3_70fos"]
 [ext_resource type="Script" uid="uid://crcg4uhcaoku3" path="res://entities/player/state_machine/walk_state.gd" id="4_70fos"]
 [ext_resource type="Script" uid="uid://boafly1kdyf0j" path="res://entities/player/state_machine/idle_state.gd" id="5_3gwuk"]
+[ext_resource type="Script" uid="uid://bye2e286ixknq" path="res://entities/player/state_machine/sprint_state.gd" id="6_8p2dg"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_d6hny"]
+height = 2.6
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0hc0"]
+height = 2.7
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_f0hc0"]
 height = 1.0
 
+[sub_resource type="Animation" id="Animation_8p2dg"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1.2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_pn2pq"]
+resource_name = "run"
+length = 0.25
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2, 0),
+"points": PackedFloat32Array(1.2, -0.25, 0, 0.033333335, -0.012627244, 1.2174087, -0.016356789, 0.001199645, 0.03333333, -0.002444744, 1.1929609, -0.011111112, 0.0003855951, 0.019444443, -0.00067479134, 1.1999575, -0.049999997, 0.017189264, 0, 0),
+"times": PackedFloat32Array(0, 0.06666667, 0.13333334, 0.25)
+}
+
+[sub_resource type="Animation" id="Animation_yihem"]
+resource_name = "walk"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1.2, -0.25, 0, 0.16666667, -0.14631248, 1.2, -0.23333332, 0.1465416, 0, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pn2pq"]
+_data = {
+&"RESET": SubResource("Animation_8p2dg"),
+&"run": SubResource("Animation_pn2pq"),
+&"walk": SubResource("Animation_yihem")
+}
+
 [node name="Player" type="CharacterBody3D" unique_id=1420703360]
+collision_mask = 2
 script = ExtResource("1_ss6mo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1929477229]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.006205082, -0.032852173, -0.007752657)
 mesh = SubResource("CapsuleMesh_d6hny")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1030394811]
@@ -24,18 +80,25 @@ shape = SubResource("CapsuleShape3D_f0hc0")
 
 [node name="FiniteStateMachine" type="Node" parent="." unique_id=2023674603 node_paths=PackedStringArray("state")]
 script = ExtResource("2_41haj")
-state = NodePath("BaseState")
+state = NodePath("IdleState")
 
 [node name="BaseState" type="Node" parent="FiniteStateMachine" unique_id=719929912]
 script = ExtResource("3_70fos")
 
-[node name="WalkState" type="Node" parent="FiniteStateMachine" unique_id=1780203096 node_paths=PackedStringArray("idle_state", "actor")]
+[node name="WalkState" type="Node" parent="FiniteStateMachine" unique_id=1780203096 node_paths=PackedStringArray("idle_state", "sprint_state", "actor")]
 script = ExtResource("4_70fos")
 idle_state = NodePath("../IdleState")
+sprint_state = NodePath("../SprintState")
 actor = NodePath("../..")
 
 [node name="IdleState" type="Node" parent="FiniteStateMachine" unique_id=261702867 node_paths=PackedStringArray("walk_state", "actor")]
 script = ExtResource("5_3gwuk")
+walk_state = NodePath("../WalkState")
+actor = NodePath("../..")
+
+[node name="SprintState" type="Node" parent="FiniteStateMachine" unique_id=832383151 node_paths=PackedStringArray("idle_state", "walk_state", "actor")]
+script = ExtResource("6_8p2dg")
+idle_state = NodePath("../IdleState")
 walk_state = NodePath("../WalkState")
 actor = NodePath("../..")
 
@@ -44,7 +107,9 @@ shape = SubResource("CylinderShape3D_f0hc0")
 target_position = Vector3(0, 1, 0)
 
 [node name="Head" type="Node3D" parent="." unique_id=2028174227]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68736356, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=1715539110]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2018630002]
+libraries/ = SubResource("AnimationLibrary_pn2pq")

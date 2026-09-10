@@ -15,7 +15,7 @@ class_name Player
 @onready var fsm = $FiniteStateMachine as FiniteStateMachine
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
-#@onready var animation_player : AnimationPlayer = $AnimationPlayer
+@onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var collider = $CollisionShape3D
 @onready var ceiling_check_cast = $CeilingCheckCast
 
@@ -28,12 +28,13 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		head.rotate_y(-event.relative.x * 0.005 * mouse_sensitivity_horizontal)
-		camera.rotate_x(-event.relative.y * 0.005 * mouse_sensitivity_vertical)
-		
-		var horizontal_mouse_direction = -(event.relative.x * 0.2 * mouse_sensitivity_horizontal)
-		camera.rotation_degrees.z = (lerp(camera.rotation_degrees.z, horizontal_mouse_direction, 0.5))
-		
+		if mouse_lock:
+			head.rotate_y(-event.relative.x * 0.005 * mouse_sensitivity_horizontal)
+			camera.rotate_x(-event.relative.y * 0.005 * mouse_sensitivity_vertical)
+			
+			var horizontal_mouse_direction = -(event.relative.x * 0.2 * mouse_sensitivity_horizontal)
+			camera.rotation_degrees.z = (lerp(camera.rotation_degrees.z, horizontal_mouse_direction, 0.5))
+
 		#self.camera_tilt = lerp(self.camera_tilt, horizontal_mouse_direction, 1)
 		#self.vertical_rotation -= (event.relative.y * 0.0045 * mouse_sensitivity_vertical)
 	
@@ -65,7 +66,7 @@ func update_player_values() -> void:
 
 
 # ------------------------Update FiniteStateMachine------------------------
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Try to not mix other functions in here (keep it clean)
 func _physics_process(delta):
 	fsm.process_physics(delta)
 
