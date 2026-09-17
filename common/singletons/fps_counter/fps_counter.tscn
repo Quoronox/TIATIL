@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c03wuy3xc23bo"]
+
+[ext_resource type="Script" uid="uid://djg5rtgki6ci" path="res://common/singletons/fps_counter/fps_counter.gd" id="1_d8fbu"]
+[ext_resource type="FontFile" uid="uid://pl75opl3eef3" path="res://assets/fonts/Montserrat-VariableFont_wght.ttf" id="2_tlmr8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_qkv46"]
+font = ExtResource("2_tlmr8")
+font_size = 18
+outline_size = 2
+outline_color = Color(0.71838135, 0.71838135, 0.71838135, 1)
+
+[node name="FPSCounter" type="CanvasLayer" unique_id=2004392647]
+script = ExtResource("1_d8fbu")
+
+[node name="Label" type="Label" parent="." unique_id=2021299780]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "60"
+label_settings = SubResource("LabelSettings_qkv46")

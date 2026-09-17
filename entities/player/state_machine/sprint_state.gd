@@ -44,6 +44,8 @@ func process_input(event: InputEvent) -> Base_State:
 		return walk_state
 	
 	if Input.is_action_just_released("movment"):
+		var tween = get_tree().create_tween()
+		tween.tween_property(actor, "fov", 90.0, 0.8).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT).from_current()
 		return idle_state
 	
 	return null

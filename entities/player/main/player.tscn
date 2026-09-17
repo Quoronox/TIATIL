@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://crcg4uhcaoku3" path="res://entities/player/state_machine/walk_state.gd" id="4_70fos"]
 [ext_resource type="Script" uid="uid://boafly1kdyf0j" path="res://entities/player/state_machine/idle_state.gd" id="5_3gwuk"]
 [ext_resource type="Script" uid="uid://bye2e286ixknq" path="res://entities/player/state_machine/sprint_state.gd" id="6_8p2dg"]
+[ext_resource type="Script" uid="uid://cv7xlxhu0llus" path="res://entities/player/state_machine/crouch_state.gd" id="7_yihem"]
+[ext_resource type="Shader" uid="uid://l2yjroqxk71s" path="res://rendering/shaders/distortion_main.gdshader" id="8_pn2pq"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_d6hny"]
 height = 2.6
@@ -15,6 +17,23 @@ height = 2.7
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_f0hc0"]
 height = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yihem"]
+shader = ExtResource("8_pn2pq")
+shader_parameter/exposure = 1.0790000275025
+shader_parameter/contrast = 1.25
+shader_parameter/saturation = 0.9
+shader_parameter/enable_pixelate = true
+shader_parameter/pixel_factor = 1.5000000475
+shader_parameter/enable_posterize = true
+shader_parameter/color_levels = 12.0
+shader_parameter/dither_strength = 0.75
+shader_parameter/chrom_aberration = 4.0
+shader_parameter/vignette_strength = 1.0
+shader_parameter/grain_strength = 0.2
+shader_parameter/tint_color = Vector3(0.95, 1.03, 0.9)
+shader_parameter/tint_strength = 0.15
+shader_parameter/viewport_size_override = Vector2(0, 0)
 
 [sub_resource type="Animation" id="Animation_8p2dg"]
 length = 0.001
@@ -27,6 +46,28 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0),
 "points": PackedFloat32Array(1.2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:shape:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(2.7, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 
@@ -43,6 +84,32 @@ tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 2, 2, 0),
 "points": PackedFloat32Array(1.2, -0.25, 0, 0.033333335, -0.012627244, 1.2174087, -0.016356789, 0.001199645, 0.03333333, -0.002444744, 1.1929609, -0.011111112, 0.0003855951, 0.019444443, -0.00067479134, 1.1999575, -0.049999997, 0.017189264, 0, 0),
 "times": PackedFloat32Array(0, 0.06666667, 0.13333334, 0.25)
+}
+
+[sub_resource type="Animation" id="Animation_a5d0e"]
+resource_name = "to_crouch"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(2.7, -0.25, 0, 0.1, 1.4781952e-05, 1.6, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.1, 0.017876837, -0.5, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5)
 }
 
 [sub_resource type="Animation" id="Animation_yihem"]
@@ -64,6 +131,7 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_8p2dg"),
 &"run": SubResource("Animation_pn2pq"),
+&"to_crouch": SubResource("Animation_a5d0e"),
 &"walk": SubResource("Animation_yihem")
 }
 
@@ -73,6 +141,7 @@ script = ExtResource("1_ss6mo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1929477229]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.006205082, -0.032852173, -0.007752657)
+visible = false
 mesh = SubResource("CapsuleMesh_d6hny")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1030394811]
@@ -85,15 +154,17 @@ state = NodePath("IdleState")
 [node name="BaseState" type="Node" parent="FiniteStateMachine" unique_id=719929912]
 script = ExtResource("3_70fos")
 
-[node name="WalkState" type="Node" parent="FiniteStateMachine" unique_id=1780203096 node_paths=PackedStringArray("idle_state", "sprint_state", "actor")]
+[node name="WalkState" type="Node" parent="FiniteStateMachine" unique_id=1780203096 node_paths=PackedStringArray("idle_state", "sprint_state", "crouch_state", "actor")]
 script = ExtResource("4_70fos")
 idle_state = NodePath("../IdleState")
 sprint_state = NodePath("../SprintState")
+crouch_state = NodePath("../CrouchState")
 actor = NodePath("../..")
 
-[node name="IdleState" type="Node" parent="FiniteStateMachine" unique_id=261702867 node_paths=PackedStringArray("walk_state", "actor")]
+[node name="IdleState" type="Node" parent="FiniteStateMachine" unique_id=261702867 node_paths=PackedStringArray("walk_state", "crouch_state", "actor")]
 script = ExtResource("5_3gwuk")
 walk_state = NodePath("../WalkState")
+crouch_state = NodePath("../CrouchState")
 actor = NodePath("../..")
 
 [node name="SprintState" type="Node" parent="FiniteStateMachine" unique_id=832383151 node_paths=PackedStringArray("idle_state", "walk_state", "actor")]
@@ -102,14 +173,29 @@ idle_state = NodePath("../IdleState")
 walk_state = NodePath("../WalkState")
 actor = NodePath("../..")
 
+[node name="CrouchState" type="Node" parent="FiniteStateMachine" unique_id=664282800 node_paths=PackedStringArray("idle_state", "walk_state", "actor")]
+script = ExtResource("7_yihem")
+idle_state = NodePath("../IdleState")
+walk_state = NodePath("../WalkState")
+actor = NodePath("../..")
+
 [node name="CeilingCheckCast" type="ShapeCast3D" parent="." unique_id=161029446]
 shape = SubResource("CylinderShape3D_f0hc0")
 target_position = Vector3(0, 1, 0)
+collision_mask = 2
 
 [node name="Head" type="Node3D" parent="." unique_id=2028174227]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68736356, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=1715539110]
+
+[node name="ShaderOverlay" type="ColorRect" parent="Head/Camera3D" unique_id=1334283532]
+material = SubResource("ShaderMaterial_yihem")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2018630002]
 libraries/ = SubResource("AnimationLibrary_pn2pq")

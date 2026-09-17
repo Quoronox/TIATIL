@@ -76,6 +76,7 @@ func _unhandled_input(event):
 
 
 func _process(delta):
+	#print(self.fov)
 	fsm.process_frame(delta)
 	update_player_values()
 # -------------------------------------------------------------------------------
