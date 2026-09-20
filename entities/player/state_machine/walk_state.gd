@@ -12,6 +12,7 @@ extends Base_State
 func enter_state():
 	set_physics_process(true)
 	print("enter state: walk")
+	actor.trauma_causer.cause_trauma(0.4)
 	
 
 func exit_state():
@@ -22,7 +23,7 @@ func exit_state():
 #------------------------------<Current state loop>-----------------------------------------------------------------
 func process_physics(delta: float) -> Base_State:
 	var input_direction = Input.get_vector("left","right","forward","back")
-	var direction = (actor.head.transform.basis * Vector3(input_direction.x, 0, input_direction.y)).normalized()
+	var direction = (actor.head_y.transform.basis * Vector3(input_direction.x, 0, input_direction.y)).normalized()
 	
 	var target_velocity = direction * actor.speed
 	var horizontal_velocity = Vector3(actor.velocity.x, 0, actor.velocity.z)

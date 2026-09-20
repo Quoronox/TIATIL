@@ -7,26 +7,31 @@
 [ext_resource type="Script" uid="uid://boafly1kdyf0j" path="res://entities/player/state_machine/idle_state.gd" id="5_3gwuk"]
 [ext_resource type="Script" uid="uid://bye2e286ixknq" path="res://entities/player/state_machine/sprint_state.gd" id="6_8p2dg"]
 [ext_resource type="Script" uid="uid://cv7xlxhu0llus" path="res://entities/player/state_machine/crouch_state.gd" id="7_yihem"]
-[ext_resource type="Shader" uid="uid://l2yjroqxk71s" path="res://rendering/shaders/distortion_main.gdshader" id="8_pn2pq"]
+[ext_resource type="PackedScene" uid="uid://4pyxr454ij4p" path="res://entities/camera/dynamic_camera.tscn" id="9_a5d0e"]
+[ext_resource type="PackedScene" uid="uid://caglnbosdwq6x" path="res://common/trauma_causer/trauma_causer.tscn" id="9_faoxc"]
+[ext_resource type="Shader" uid="uid://l2yjroqxk71s" path="res://rendering/shaders/distortion_main.gdshader" id="9_jrvxk"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_d6hny"]
+radius = 0.4
 height = 2.6
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0hc0"]
+radius = 0.4
 height = 2.7
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_f0hc0"]
 height = 1.0
+radius = 0.39
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yihem"]
-shader = ExtResource("8_pn2pq")
-shader_parameter/exposure = 1.0790000275025
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f0hc0"]
+shader = ExtResource("9_jrvxk")
+shader_parameter/exposure = 0.9530000215175001
 shader_parameter/contrast = 1.25
 shader_parameter/saturation = 0.9
 shader_parameter/enable_pixelate = true
-shader_parameter/pixel_factor = 1.5000000475
+shader_parameter/pixel_factor = 1.170000031825
 shader_parameter/enable_posterize = true
-shader_parameter/color_levels = 12.0
+shader_parameter/color_levels = 9.7990003704525
 shader_parameter/dither_strength = 0.75
 shader_parameter/chrom_aberration = 4.0
 shader_parameter/vignette_strength = 1.0
@@ -82,7 +87,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 2, 2, 0),
-"points": PackedFloat32Array(1.2, -0.25, 0, 0.033333335, -0.012627244, 1.2174087, -0.016356789, 0.001199645, 0.03333333, -0.002444744, 1.1929609, -0.011111112, 0.0003855951, 0.019444443, -0.00067479134, 1.1999575, -0.049999997, 0.017189264, 0, 0),
+"points": PackedFloat32Array(1.2, -0.25, 0, 0.033333335, -0.012627244, 1.275148, -0.016356789, 0.001199645, 0.03333333, -0.002444744, 1.1762099, -0.03333334, 0.0056979656, 0.01782478, -0.0030469492, 1.1999575, -0.049999997, 0.017189264, 0, 0),
 "times": PackedFloat32Array(0, 0.06666667, 0.13333334, 0.25)
 }
 
@@ -135,6 +140,8 @@ _data = {
 &"walk": SubResource("Animation_yihem")
 }
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_f0hc0"]
+
 [node name="Player" type="CharacterBody3D" unique_id=1420703360]
 collision_mask = 2
 script = ExtResource("1_ss6mo")
@@ -184,13 +191,20 @@ shape = SubResource("CylinderShape3D_f0hc0")
 target_position = Vector3(0, 1, 0)
 collision_mask = 2
 
-[node name="Head" type="Node3D" parent="." unique_id=2028174227]
+[node name="HeadY" type="Node3D" parent="." unique_id=2028174227]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68736356, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1715539110]
+[node name="HeadX" type="Node3D" parent="HeadY" unique_id=1679143597]
 
-[node name="ShaderOverlay" type="ColorRect" parent="Head/Camera3D" unique_id=1334283532]
-material = SubResource("ShaderMaterial_yihem")
+[node name="HeadZ" type="Node3D" parent="HeadY/HeadX" unique_id=455968237]
+
+[node name="DynamicCamera" parent="HeadY/HeadX/HeadZ" unique_id=1416255017 instance=ExtResource("9_a5d0e")]
+current = true
+fov = 90.0
+noise_speed = 200.0
+
+[node name="ShaderFilter" type="ColorRect" parent="HeadY/HeadX/HeadZ/DynamicCamera" unique_id=1861521470]
+material = SubResource("ShaderMaterial_f0hc0")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -199,3 +213,10 @@ grow_vertical = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2018630002]
 libraries/ = SubResource("AnimationLibrary_pn2pq")
+
+[node name="TraumaCauser" parent="." unique_id=567386536 instance=ExtResource("9_faoxc")]
+use_custom_trauma_amount = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TraumaCauser" unique_id=1275575124]
+shape = SubResource("SphereShape3D_f0hc0")
+debug_color = Color(0.9678219, 0, 0.4748584, 0.41960785)

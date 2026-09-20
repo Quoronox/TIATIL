@@ -32,6 +32,7 @@ func process_physics(delta: float) -> Base_State:
 		actor.velocity.y -= actor.gravity * delta
 	
 	actor.move_and_slide()
+	
 	return null
 
 func process_input(event: InputEvent) -> Base_State:
@@ -48,5 +49,6 @@ func process_input(event: InputEvent) -> Base_State:
 	return null
 
 func process_frame(delta: float) -> Base_State:
+	
 	return null
 #-------------------------------------------------------------------------------------------------------------------

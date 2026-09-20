@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://caglnbosdwq6x"]
+
+[ext_resource type="Script" uid="uid://c38ow0gmfaoql" path="res://common/trauma_causer/trauma_causer.gd" id="1_iv04s"]
+
+[node name="TraumaCauser" type="Area3D" unique_id=567386536]
+script = ExtResource("1_iv04s")

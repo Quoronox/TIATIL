@@ -13,11 +13,15 @@ class_name Player
 @export_range(1, 10) var mouse_sensitivity_vertical: float = 1.3
 
 @onready var fsm = $FiniteStateMachine as FiniteStateMachine
-@onready var head = $Head
-@onready var camera = $Head/Camera3D
+@onready var head_y = $HeadY
+@onready var head_x = $HeadY/HeadX
+@onready var head_z = $HeadY/HeadX/HeadZ
+@onready var camera = $HeadY/HeadX/HeadZ/DynamicCamera
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var collider = $CollisionShape3D
 @onready var ceiling_check_cast = $CeilingCheckCast
+@onready var trauma_causer = $TraumaCauser
+
 
 var mouse_lock : bool = true
 
@@ -29,12 +33,13 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseMotion:
 		if mouse_lock:
-			head.rotate_y(-event.relative.x * 0.005 * mouse_sensitivity_horizontal)
-			camera.rotate_x(-event.relative.y * 0.005 * mouse_sensitivity_vertical)
+			head_y.rotate_y(-event.relative.x * 0.005 * mouse_sensitivity_horizontal)
+			head_x.rotate_x(-event.relative.y * 0.005 * mouse_sensitivity_vertical)
+			
 			
 			var horizontal_mouse_direction = -(event.relative.x * 0.2 * mouse_sensitivity_horizontal)
-			camera.rotation_degrees.z = (lerp(camera.rotation_degrees.z, horizontal_mouse_direction, 0.5))
-
+			head_z.rotation_degrees.z = (lerp(head_z.rotation_degrees.z, horizontal_mouse_direction, 0.5))
+			
 		#self.camera_tilt = lerp(self.camera_tilt, horizontal_mouse_direction, 1)
 		#self.vertical_rotation -= (event.relative.y * 0.0045 * mouse_sensitivity_vertical)
 	
@@ -54,8 +59,9 @@ func enable_mouse_lock() -> void:
 
 
 func update_player_values() -> void:
+	camera.rotation_degrees.x=0
 	camera.fov = self.fov
-	head.position.y = self.height
+	head_y.position.y = self.height
 	
 	if Input.is_action_just_pressed("toggle_mouse_lock"):
 		mouse_lock = !mouse_lock

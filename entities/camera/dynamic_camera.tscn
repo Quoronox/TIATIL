@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://4pyxr454ij4p"]
+
+[ext_resource type="Script" uid="uid://da8265ulful5l" path="res://entities/camera/dynamic_camera.gd" id="1_jvkfc"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sn40b"]
+fractal_octaves = 4
+metadata/_preview_in_3d_space_ = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_f0hc0"]
+radius = 1.5
+
+[node name="DynamicCamera" type="Camera3D" unique_id=2070541166]
+script = ExtResource("1_jvkfc")
+noise = SubResource("FastNoiseLite_sn40b")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=383645537]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1196166694]
+shape = SubResource("SphereShape3D_f0hc0")
