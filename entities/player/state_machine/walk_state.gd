@@ -11,7 +11,7 @@ extends Base_State
 #------------------------------<initialization & cleanup>-----------------------------------------------------------
 func enter_state():
 	set_physics_process(true)
-	print("enter state: walk")
+	#print("enter state: walk")
 	actor.trauma_causer.cause_trauma(0.4)
 	
 

@@ -9,11 +9,13 @@ class_name Idle_State
 
 #------------------------------<initialization & cleanup>-----------------------------------------------------------
 func enter_state():
-	print("enter idle")
+	#print("enter idle")
+	pass
 	
 
 func exit_state():
-	print("exit idle")
+	#print("exit idle")
+	pass
 #-------------------------------------------------------------------------------------------------------------------
 
 
@@ -37,7 +39,7 @@ func process_physics(delta: float) -> Base_State:
 
 func process_input(event: InputEvent) -> Base_State:
 	if Input.is_action_pressed("movment"):
-		print("idle -> walk")
+		#print("idle -> walk")
 		var tween = get_tree().create_tween()
 		tween.tween_property(actor, "fov", 90.0, 0.8).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT).from_current()
 		return walk_state

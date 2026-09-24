@@ -10,7 +10,7 @@ extends Base_State
 #------------------------------<initialization & cleanup>-----------------------------------------------------------
 func enter_state():
 	set_physics_process(true)
-	print("enter state: crouch")
+	#print("enter state: crouch")
 	actor.trauma_causer.cause_trauma(0.2)
 	
 	#actor.animation_player.play("to_crouch", -1, -7.0, true)
@@ -31,7 +31,7 @@ func exit_state():
 
 #------------------------------<Current state loop>-----------------------------------------------------------------
 func process_physics(delta: float) -> Base_State:
-	print("in crouch")
+	#print("in crouch")
 	var input_direction = Input.get_vector("left","right","forward","back")
 	var direction = (actor.head_y.transform.basis * Vector3(input_direction.x, 0, input_direction.y)).normalized()
 	

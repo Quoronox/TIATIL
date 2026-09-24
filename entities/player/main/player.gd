@@ -71,6 +71,18 @@ func update_player_values() -> void:
 	#print($CollisionShape3D.shape.height)
 
 
+# ------------------------Relevant to scene transition---------------------
+func enable() -> void:
+	self.set_process(true)
+	self.set_physics_process(true)
+
+
+func disable() -> void:
+	self.set_process(false)
+	self.set_physics_process(false)
+# -------------------------------------------------------------------------
+
+
 # ------------------------Update FiniteStateMachine------------------------
 # Try to not mix other functions in here (keep it clean)
 func _physics_process(delta):

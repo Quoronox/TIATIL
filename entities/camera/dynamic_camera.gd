@@ -26,7 +26,7 @@ func _process(delta) -> void:
 
 
 func add_trauma(trauma_amount: float) -> void:
-	print("activated Add_trauma")
+	#print("activated Add_trauma")
 	trauma = clamp(trauma + trauma_amount, 0.0, 1.0)
 
 func get_shake_intensity() -> float:

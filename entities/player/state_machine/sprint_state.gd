@@ -10,7 +10,7 @@ extends Base_State
 #------------------------------<initialization & cleanup>-----------------------------------------------------------
 func enter_state():
 	set_physics_process(true)
-	print("enter state: sprint")
+	#print("enter state: sprint")
 	actor.trauma_causer.cause_trauma(0.3)
 	
 

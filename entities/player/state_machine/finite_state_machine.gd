@@ -5,7 +5,8 @@ extends Node
 
 func init(_parent: Player):
 	for child in get_children():
-		print(child)
+		pass
+		#print(child)
 	
 	change_state(state)
 
