@@ -11,7 +11,7 @@ signal _content_invalid(content_path:String)
 signal _content_failed_to_load(copntent_path:String)
 
 var _loading_screen : LoadingScreen
-var _loading_screen_scene: PackedScene = preload("res://common/loading_screens/loading_screen_1/loading_screen_1.tscn")
+var _loading_screen_scene: PackedScene = preload("res://common/loading_screens/loading_screen/loading_screen.tscn")
 var _transition: String
 var _content_path: String
 var _load_progress_timer: Timer

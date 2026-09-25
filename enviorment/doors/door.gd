@@ -4,7 +4,7 @@ class_name Door
 signal player_entered_door(door: Door, transition_type: String)
 
 @export_enum("north", "west", "south", "east") var entry_direction
-@export_enum("fade_to_black") var transition_type: String
+@export_enum("fade_to_black", "fade_to_diamond", "fade_to_swirl") var transition_type: String
 @export var push_distance: int = 150
 @export var path_to_new_scene: String
 @export var entry_door_name: String

@@ -92,7 +92,7 @@ mesh = SubResource("BoxMesh_v8lbp")
 [node name="Door_1" parent="." unique_id=1167730398 instance=ExtResource("3_1e31y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.842381, 0.9591547, 3.530252)
 entry_direction = 3
-transition_type = "fade_to_black"
+transition_type = "fade_to_swirl"
 push_distance = 0
 path_to_new_scene = "res://enviorment/worlds/testing/world_0.tscn"
 entry_door_name = "Door_1"
