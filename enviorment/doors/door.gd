@@ -15,7 +15,9 @@ func _on_body_entered(body):
 	if !body.is_in_group("player"):
 		return
 	player_entered_door.emit(self)
-	if debug_mode: print("Door: Entered Door")
+	if debug_mode: 
+		print("Door: Entered Door")
+		DevConsole._push_complete("Door: Entered Door")
 	
 	var gameplay_node: GameManager = get_tree().get_nodes_in_group("game_manager")[0] as GameManager
 	var unload:Node = gameplay_node.current_world

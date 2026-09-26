@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://c8r5u7vu0tawa"]
+
+[ext_resource type="Script" uid="uid://def1akr28fnqa" path="res://common/utility/dev_console/dev_console.gd" id="1_cxrs5"]
+
+[node name="DevConsole" type="CanvasLayer" unique_id=774445843]
+layer = 2
+script = ExtResource("1_cxrs5")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=190324910]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = -168.0
+offset_right = 268.0
+offset_bottom = -14.0
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer" unique_id=449515976]
+layout_mode = 2
+color = Color(0.13725491, 0.13725491, 0.13725491, 0.62352943)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1606974683]
+layout_mode = 2
+alignment = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=225187096]
+texture_filter = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(1, 1, 1, 0.65882355)
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
+scroll_following = true
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=1858918559]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 0.37254903)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 0.6313726)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.6)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 11
+placeholder_text = "input:"
+clear_button_enabled = true

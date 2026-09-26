@@ -22,6 +22,7 @@ var _loading_in_progress: bool = false
 
 func _ready():
 	print("SceneManager: start")
+	DevConsole._push_info("SceneManager: start")
 	_content_invalid.connect(_on_content_invalid)
 	_content_failed_to_load.connect(_on_content_failed_to_load)
 	_content_finished_loading.connect(_on_content_finished_loading)
@@ -36,15 +37,20 @@ func _add_loading_screen(transition_type:String="fade_to_black"):
 	_transition = "no_to_transition" if transition_type == "no_transition" else transition_type
 	_loading_screen = _loading_screen_scene.instantiate() as LoadingScreen
 	get_tree().root.add_child(_loading_screen)
-	if debug_mode: print("SceneManager: _add_loading_screen: " + str(get_tree().root))
+	if debug_mode: 
+		print("SceneManager: _add_loading_screen: " + str(get_tree().root))
+		DevConsole._push_processing("SceneManager: _add_loading_screen: " + str(get_tree().root))
 	_loading_screen.start_transition(_transition)
 
 
 func load_new_scene(scene_to_load:String, load_into:Node=null, scene_to_unload:Node=null, transition_type:String="fade_to_black"):
-	if debug_mode: print("SceneManager: load_new_scene")
+	if debug_mode: 
+		print("SceneManager: load_new_scene")
+		DevConsole._push_processing("SceneManager: load_new_scene")
 	
 	if _loading_in_progress:
 		push_warning("SceneManager is already loading something")
+		DevConsole._push_warning("SceneManager is already loading something")
 		return
 	
 	_loading_in_progress = true
@@ -57,7 +63,9 @@ func load_new_scene(scene_to_load:String, load_into:Node=null, scene_to_unload:N
 	
 
 func _load_content(content_path: String):
-	if debug_mode: print("SceneManager: _load_content")
+	if debug_mode: 
+		print("SceneManager: _load_content")
+		DevConsole._push_processing("SceneManager: _load_content")
 	load_start.emit(_loading_screen)
 	
 	if _loading_screen != null:
@@ -77,28 +85,35 @@ func _load_content(content_path: String):
 	
 	
 func monitor_load_status():
-	if debug_mode: print("Manager: monitor_load_status")
+	if debug_mode: 
+		print("Manager: monitor_load_status")
+		DevConsole._push_processing("Manager: monitor_load_status")
 	var load_progress = []
 	var load_status = ResourceLoader.load_threaded_get_status(_content_path, load_progress)
 	
 	match load_status:
 		ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			print("ERROR: THREAD_LOAD_INVALID_RESOURCE")
+			DevConsole._push_error("ERROR: THREAD_LOAD_INVALID_RESOURCE")
 			_content_invalid.emit(_content_path)
 			_load_progress_timer.stop()
 			return
 		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			print("LOADING...: THREAD_LOAD_IN_PROGRESS")
+			DevConsole._push_processing("LOADING...: THREAD_LOAD_IN_PROGRESS")
 			if _loading_screen != null:
 				print("SceneManager: Loading file screen --> found")
+				DevConsole._push_complete("SceneManager: Loading file screen --> found")
 				_loading_screen.update_bar(load_progress[0]* 100)
 		ResourceLoader.THREAD_LOAD_FAILED:
 			print("ERROR: THREAD_LOAD_FAILED")
+			DevConsole._push_error("ERROR: THREAD_LOAD_FAILED")
 			_content_failed_to_load.emit(_content_path)
 			_load_progress_timer.stop()
 			return
 		ResourceLoader.THREAD_LOAD_LOADED:
 			print("LOADING FINISHED: THREAD_LOAD_LOADED")
+			DevConsole._push_complete("LOADING FINISHED: THREAD_LOAD_LOADED")
 			_load_progress_timer.stop()
 			_load_progress_timer.queue_free()
 			
@@ -108,14 +123,18 @@ func monitor_load_status():
 
 func _on_content_failed_to_load(path:String):
 	printerr("ERROR: failed to load resouce: '%s'" % [path])
+	DevConsole._push_error("ERROR: failed to load resouce: '%s'" % [path])
 
 
 func _on_content_invalid(path:String):
 	printerr("ERROR: cannot load resouce: '%s'" % [path])
+	DevConsole._push_error("ERROR: cannot load resouce: '%s'" % [path])
 
 
 func _on_content_finished_loading(incoming_scene):
-	if debug_mode: print("SceneManager: on_content_finished_loading")
+	if debug_mode: 
+		print("SceneManager: on_content_finished_loading")
+		DevConsole._push_complete("SceneManager: on_content_finished_loading")
 	var outgoing_scene = _scene_to_unload
 	
 	if outgoing_scene != null:
@@ -129,6 +148,7 @@ func _on_content_finished_loading(incoming_scene):
 	if _scene_to_unload != null:
 		if _scene_to_unload != get_tree().root:
 			print("now deleating : " + str(outgoing_scene))
+			DevConsole._push_info("now deleating : " + str(outgoing_scene))
 			_scene_to_unload.queue_free()
 	
 	if _loading_screen != null:

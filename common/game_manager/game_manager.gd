@@ -8,7 +8,9 @@ var current_world # <- should allways be "World" or "IntermissionScreen"
 
 
 func _ready():
-	if debug_mode: print("GameManager: Is Created ")
+	if debug_mode: 
+		print("GameManager: Is Created ")
+		DevConsole._push_complete("GameManager: Is Created ")
 	
 	SceneManager.load_complete.connect(_on_world_loaded)
 	SceneManager.load_start.connect(_on_load_start)

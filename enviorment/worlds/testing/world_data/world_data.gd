@@ -38,20 +38,28 @@ func start_scene() -> void:
 
 func init_player_location() -> void:
 	player.visible = true
-	if debug_mode: print("World: init_player_location")
+	if debug_mode: 
+		print("World: init_player_location")
+		DevConsole._push_info("World: init_player_location")
 	
 	if data != null:
-		if debug_mode: print("World: data not <null>")
+		if debug_mode: 
+			print("World: data not <null>")
+			DevConsole._push_complete("World: data not <null>")
 		for door in doors:
 			if door.name == data.entry_door_name:
-				if debug_mode: print("World: Retrieved door connections")
+				if debug_mode: 
+					print("World: Retrieved door connections")
+					DevConsole._push_complete("World: Retrieved door connections")
 				#player.position = door.get_player_entry_vector()
 				player.position = Vector3(0,0,0)
 
 
 
 func _on_player_entered_door(door: Door) -> void:
-	if debug_mode: print("World: _on_player_entered_door")
+	if debug_mode: 
+		print("World: _on_player_entered_door")
+		DevConsole._push_info("World: _on_player_entered_door")
 	_disconnect_from_doors()
 	
 	player.disable()
@@ -62,14 +70,18 @@ func _on_player_entered_door(door: Door) -> void:
 
 
 func _connect_to_doors() -> void:
-	if debug_mode: print("World: _connect_to_doors")
+	if debug_mode: 
+		print("World: _connect_to_doors")
+		DevConsole._push_info("World: _connect_to_doors")
 	for door in doors:
 		if not door.player_entered_door.is_connected(_on_player_entered_door):
 			door.player_entered_door.connect(_on_player_entered_door)
 
 
 func _disconnect_from_doors() -> void:
-	if debug_mode: print("World: _disconnect_from_doors")
+	if debug_mode: 
+		print("World: _disconnect_from_doors")
+		DevConsole._push_info("World: _disconnect_from_doors")
 	for door in doors:
 		if door.player_entered_door.is_connected(_on_player_entered_door):
 			door.player_entered_door.disconnect(_on_player_entered_door)
