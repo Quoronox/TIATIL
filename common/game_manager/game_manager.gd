@@ -7,7 +7,7 @@ class_name GameManager
 var current_world # <- should allways be "World" or "IntermissionScreen"
 
 
-func _ready():
+func _ready() -> void:
 	if debug_mode: 
 		print("GameManager: Is Created ")
 		DevConsole._push_complete("GameManager: Is Created ")
@@ -18,18 +18,17 @@ func _ready():
 	current_world = world_holder.get_child(0)
 
 
-func _on_world_loaded(world):
+func _on_world_loaded(world) -> void:
 	if world is World:
 		current_world = world
 
 
-func _on_world_added(_world,_loading_screen):
-	pass
+func _on_world_added(_world,_loading_screen) -> void:
 	# keep loading screen on top
 	if _loading_screen != null:
 		var loading_parent: Node = _loading_screen.get_parent() as Node
 		loading_parent.move_child(_loading_screen, loading_parent.get_child_count()-1)
 
 
-func _on_load_start(_loading_screen):
+func _on_load_start(_loading_screen) -> void:
 	pass

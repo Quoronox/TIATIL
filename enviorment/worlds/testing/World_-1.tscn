@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://01q0tlau2s2t"]
+
+[ext_resource type="PackedScene" uid="uid://dj745xqjfmqrs" path="res://enviorment/doors/Door.tscn" id="1_h50d2"]
+[ext_resource type="Script" uid="uid://dc13vx2sg8hh5" path="res://enviorment/worlds/testing/world_data/world_data.gd" id="1_p83l0"]
+[ext_resource type="PackedScene" uid="uid://dn2ui7tkn7m7k" path="res://entities/player/main/player.tscn" id="3_7oogm"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p83l0"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_7oogm"]
+sky_material = SubResource("ProceduralSkyMaterial_p83l0")
+
+[sub_resource type="Environment" id="Environment_mgjs5"]
+background_mode = 2
+sky = SubResource("Sky_7oogm")
+tonemap_mode = 4
+ssao_enabled = true
+ssil_enabled = true
+glow_enabled = true
+volumetric_fog_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d6hny"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="BoxMesh" id="BoxMesh_f0hc0"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v8lbp"]
+albedo_color = Color(0.980825, 0.41718084, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_d6hny"]
+material = SubResource("StandardMaterial3D_v8lbp")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 0.5
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_f0hc0"]
+height = 0.5
+radius = 2.0
+
+[node name="World_-1" type="Node3D" unique_id=1985411193 node_paths=PackedStringArray("player", "doors")]
+script = ExtResource("1_p83l0")
+player = NodePath("Player")
+doors = [NodePath("Door_orange")]
+debug_mode = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=576259224]
+environment = SubResource("Environment_mgjs5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1366013806]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1869890584]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1140551273]
+shape = SubResource("BoxShape3D_d6hny")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1756165894]
+mesh = SubResource("BoxMesh_f0hc0")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="." unique_id=585625311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.032205, 0.42850494, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2" unique_id=1202807033]
+mesh = SubResource("CylinderMesh_d6hny")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2" unique_id=645207504]
+shape = SubResource("CylinderShape3D_f0hc0")
+
+[node name="Door_orange" parent="." unique_id=1167730398 instance=ExtResource("1_h50d2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0487843, 0, 0)
+entry_direction = 0
+transition_type = "fade_to_diamond"
+push_distance = 0
+path_to_new_scene = "res://enviorment/worlds/testing/world_0.tscn"
+entry_door_name = "Door_blue"
+debug_mode = true
+
+[node name="Player" parent="." unique_id=1420703360 instance=ExtResource("3_7oogm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

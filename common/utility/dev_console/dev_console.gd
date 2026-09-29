@@ -5,7 +5,14 @@ extends CanvasLayer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_push_text("testing")
+	_push_warning("testing")
+
+
+func _unhandled_input(event):
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_T and not event.echo:
+			self.visible = !self.visible
+			visibility_changed
 
 
 # ----------write functions-----------------

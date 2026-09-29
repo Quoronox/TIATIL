@@ -20,7 +20,7 @@ var _scene_to_unload: Node
 var _loading_in_progress: bool = false
 
 
-func _ready():
+func _ready() -> void:
 	print("SceneManager: start")
 	DevConsole._push_info("SceneManager: start")
 	_content_invalid.connect(_on_content_invalid)
@@ -28,12 +28,12 @@ func _ready():
 	_content_finished_loading.connect(_on_content_finished_loading)
 	
 
-func _return_to_initial_state():
+func _return_to_initial_state() -> void:
 	_transition = ""
 	_content_path = ""
 
 
-func _add_loading_screen(transition_type:String="fade_to_black"):
+func _add_loading_screen(transition_type:String="fade_to_black") -> void:
 	_transition = "no_to_transition" if transition_type == "no_transition" else transition_type
 	_loading_screen = _loading_screen_scene.instantiate() as LoadingScreen
 	get_tree().root.add_child(_loading_screen)
@@ -43,7 +43,7 @@ func _add_loading_screen(transition_type:String="fade_to_black"):
 	_loading_screen.start_transition(_transition)
 
 
-func load_new_scene(scene_to_load:String, load_into:Node=null, scene_to_unload:Node=null, transition_type:String="fade_to_black"):
+func load_new_scene(scene_to_load:String, load_into:Node=null, scene_to_unload:Node=null, transition_type:String="fade_to_black") -> void:
 	if debug_mode: 
 		print("SceneManager: load_new_scene")
 		DevConsole._push_processing("SceneManager: load_new_scene")
@@ -62,7 +62,7 @@ func load_new_scene(scene_to_load:String, load_into:Node=null, scene_to_unload:N
 	_load_content(scene_to_load)
 	
 
-func _load_content(content_path: String):
+func _load_content(content_path: String) -> void:
 	if debug_mode: 
 		print("SceneManager: _load_content")
 		DevConsole._push_processing("SceneManager: _load_content")
@@ -84,7 +84,7 @@ func _load_content(content_path: String):
 	_load_progress_timer.start()
 	
 	
-func monitor_load_status():
+func monitor_load_status() -> void:
 	if debug_mode: 
 		print("Manager: monitor_load_status")
 		DevConsole._push_processing("Manager: monitor_load_status")
@@ -121,17 +121,17 @@ func monitor_load_status():
 			return
 
 
-func _on_content_failed_to_load(path:String):
+func _on_content_failed_to_load(path:String) -> void:
 	printerr("ERROR: failed to load resouce: '%s'" % [path])
 	DevConsole._push_error("ERROR: failed to load resouce: '%s'" % [path])
 
 
-func _on_content_invalid(path:String):
+func _on_content_invalid(path:String) -> void:
 	printerr("ERROR: cannot load resouce: '%s'" % [path])
 	DevConsole._push_error("ERROR: cannot load resouce: '%s'" % [path])
 
 
-func _on_content_finished_loading(incoming_scene):
+func _on_content_finished_loading(incoming_scene) -> void:
 	if debug_mode: 
 		print("SceneManager: on_content_finished_loading")
 		DevConsole._push_complete("SceneManager: on_content_finished_loading")
