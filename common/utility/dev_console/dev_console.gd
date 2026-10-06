@@ -104,7 +104,7 @@ func _push_complete(text_input: String) -> void:
 func _push_processing(text_input: String) -> void:
 	var formatted_text := (
 		"[font_size=10]"
-		+ "[color=#2f5757]"
+		+ "[color=#3d9191]"
 		+ "[img=13x13]res://assets/icons/loading_icon.png[/img]"
 		+ text_input
 		+ "[/color]"
