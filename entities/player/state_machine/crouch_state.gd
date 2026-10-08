@@ -1,9 +1,9 @@
-class_name Crouch_State
-extends Base_State
+class_name CrouchState
+extends BaseState
 
 #------------------------------<states that this current state is able to access>-----------------------------------
-@export var idle_state : Base_State
-@export var walk_state : Base_State
+@export var idle_state : BaseState
+@export var walk_state : BaseState
 #-------------------------------------------------------------------------------------------------------------------
 
 
@@ -30,7 +30,7 @@ func exit_state():
 
 
 #------------------------------<Current state loop>-----------------------------------------------------------------
-func process_physics(delta: float) -> Base_State:
+func process_physics(delta: float) -> BaseState:
 	#print("in crouch")
 	var input_direction = Input.get_vector("left","right","forward","back")
 	var direction = (actor.head_y.transform.basis * Vector3(input_direction.x, 0, input_direction.y)).normalized()
@@ -50,7 +50,7 @@ func process_physics(delta: float) -> Base_State:
 	return null
 
 
-func process_input(event: InputEvent) -> Base_State:
+func process_input(event: InputEvent) -> BaseState:
 	if (Input.is_action_pressed("crouch") == false) && Input.is_action_pressed("movment")  && (actor.ceiling_check_cast.is_colliding() == false):
 		var tween = get_tree().create_tween()
 		tween.tween_property(actor, "height", 1.2, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT).from_current()
@@ -67,6 +67,6 @@ func process_input(event: InputEvent) -> Base_State:
 	return null
 
 
-func process_frame(delta: float) -> Base_State:
+func process_frame(delta: float) -> BaseState:
 	return null
 #-------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bbg6qlv4u213i"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bvmwf"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[node name="TestWeapon" type="MeshInstance3D" unique_id=1692381189]
+mesh = SubResource("BoxMesh_bvmwf")

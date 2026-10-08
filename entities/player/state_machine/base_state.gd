@@ -1,4 +1,4 @@
-class_name Base_State
+class_name BaseState
 extends Node
 
 signal state_finished
@@ -11,11 +11,11 @@ func enter_state():
 func exit_state():
 	pass
 
-func process_physics(delta: float) -> Base_State:
+func process_physics(delta: float) -> BaseState:
 	return null
 
-func process_input(event: InputEvent) -> Base_State:
+func process_input(event: InputEvent) -> BaseState:
 	return null
 
-func process_frame(delta: float) -> Base_State:
+func process_frame(delta: float) -> BaseState:
 	return null

@@ -13,6 +13,7 @@ class_name Player
 @export_range(1, 10) var mouse_sensitivity_vertical: float = 1.3
 
 @onready var fsm = $FiniteStateMachine as FiniteStateMachine
+@onready var wsm = $WeaponStateMachine as WeaponStateMachine
 @onready var head_y = $HeadY
 @onready var head_x = $HeadY/HeadX
 @onready var head_z = $HeadY/HeadX/HeadZ
@@ -27,6 +28,7 @@ var mouse_lock : bool = true
 
 func _ready():
 	fsm.init(self)
+	wsm.init(self)
 	lock_mouse_to_center()
 
 
@@ -87,10 +89,12 @@ func disable() -> void:
 # Try to not mix other functions in here (keep it clean)
 func _physics_process(delta):
 	fsm.process_physics(delta)
+	wsm.process_physics(delta)
 
 
 func _unhandled_input(event):
 	fsm.process_input(event)
+	wsm.process_input(event)
 
 
 func _process(delta):

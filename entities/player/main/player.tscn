@@ -10,6 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://4pyxr454ij4p" path="res://entities/camera/dynamic_camera.tscn" id="9_a5d0e"]
 [ext_resource type="PackedScene" uid="uid://caglnbosdwq6x" path="res://common/trauma_causer/trauma_causer.tscn" id="9_faoxc"]
 [ext_resource type="Shader" uid="uid://l2yjroqxk71s" path="res://rendering/shaders/distortion_main.gdshader" id="9_jrvxk"]
+[ext_resource type="Script" uid="uid://da0ao81j4pygw" path="res://assets/weapons/scripts/weapon_controller.gd" id="11_jrvxk"]
+[ext_resource type="Resource" uid="uid://dyh3p0vwnugpa" path="res://assets/weapons/resources/test_weapon.tres" id="12_8ks1a"]
+[ext_resource type="Script" uid="uid://wow5yp826gcn" path="res://assets/weapons/scripts/weapon_state_machine.gd" id="13_0j6l3"]
+[ext_resource type="Script" uid="uid://diig6qma8a5er" path="res://assets/weapons/scripts/states/weapon_idle_state.gd" id="14_u5jce"]
+[ext_resource type="Script" uid="uid://o20dx6g340dd" path="res://assets/weapons/scripts/states/weapon_firing_state.gd" id="15_c5baj"]
+[ext_resource type="Script" uid="uid://cagi5guedg3c" path="res://assets/weapons/scripts/states/weapon_empty_state.gd" id="16_7ddvc"]
+[ext_resource type="Script" uid="uid://cy6bvhe2spwew" path="res://assets/weapons/scripts/weapon_state.gd" id="17_u5jce"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_d6hny"]
 radius = 0.4
@@ -220,3 +227,42 @@ use_custom_trauma_amount = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TraumaCauser" unique_id=1275575124]
 shape = SubResource("SphereShape3D_f0hc0")
 debug_color = Color(0.9678219, 0, 0.4748584, 0.41960785)
+
+[node name="Components" type="Node" parent="." unique_id=1225588390]
+
+[node name="WeaponController" type="Node" parent="Components" unique_id=1402504144 node_paths=PackedStringArray("weapon_model_parent")]
+script = ExtResource("11_jrvxk")
+debug_mode = true
+current_weapon = ExtResource("12_8ks1a")
+weapon_model_parent = NodePath("../../HeadY/HeadX/HeadZ/DynamicCamera")
+
+[node name="WeaponStateMachine" type="Node" parent="." unique_id=401740831 node_paths=PackedStringArray("weapon_controller", "state")]
+script = ExtResource("13_0j6l3")
+debug_mode = true
+weapon_controller = NodePath("../Components/WeaponController")
+state = NodePath("WeaponIdleState")
+
+[node name="WeaponIdleState" type="Node" parent="WeaponStateMachine" unique_id=1419795084 node_paths=PackedStringArray("weapon_firing_state", "weapon_empty_state", "weapon_state_machine")]
+script = ExtResource("14_u5jce")
+debug_mode = true
+weapon_firing_state = NodePath("../WeaponFiringState")
+weapon_empty_state = NodePath("../WeaponEmptyState")
+weapon_state_machine = NodePath("..")
+
+[node name="WeaponFiringState" type="Node" parent="WeaponStateMachine" unique_id=2072778760 node_paths=PackedStringArray("weapon_idle_state", "weapon_empty_state", "weapon_state_machine")]
+script = ExtResource("15_c5baj")
+debug_mode = true
+weapon_idle_state = NodePath("../WeaponIdleState")
+weapon_empty_state = NodePath("../WeaponEmptyState")
+weapon_state_machine = NodePath("..")
+
+[node name="WeaponEmptyState" type="Node" parent="WeaponStateMachine" unique_id=471821210 node_paths=PackedStringArray("weapon_firing_state", "weapon_idle_state", "weapon_state_machine")]
+script = ExtResource("16_7ddvc")
+debug_mode = true
+weapon_firing_state = NodePath("../WeaponFiringState")
+weapon_idle_state = NodePath("../WeaponIdleState")
+weapon_state_machine = NodePath("..")
+
+[node name="WeaponBaseState" type="Node" parent="WeaponStateMachine" unique_id=428389882 node_paths=PackedStringArray("weapon_state_machine")]
+script = ExtResource("17_u5jce")
+weapon_state_machine = NodePath("..")

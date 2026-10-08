@@ -1,10 +1,10 @@
-class_name Walk_State
-extends Base_State
+class_name WalkState
+extends BaseState
 
 #------------------------------<states that this current state is able to access>-----------------------------------
-@export var idle_state : Base_State
-@export var sprint_state : Base_State
-@export var crouch_state : Base_State
+@export var idle_state : BaseState
+@export var sprint_state : BaseState
+@export var crouch_state : BaseState
 #-------------------------------------------------------------------------------------------------------------------
 
 
@@ -21,7 +21,7 @@ func exit_state():
 
 
 #------------------------------<Current state loop>-----------------------------------------------------------------
-func process_physics(delta: float) -> Base_State:
+func process_physics(delta: float) -> BaseState:
 	var input_direction = Input.get_vector("left","right","forward","back")
 	var direction = (actor.head_y.transform.basis * Vector3(input_direction.x, 0, input_direction.y)).normalized()
 	
@@ -39,7 +39,7 @@ func process_physics(delta: float) -> Base_State:
 	actor.move_and_slide()
 	return null
 
-func process_input(event: InputEvent) -> Base_State:
+func process_input(event: InputEvent) -> BaseState:
 	if Input.is_action_pressed("shift"):
 		var tween = get_tree().create_tween()
 		tween.tween_property(actor, "fov", 100.0, 1.0).from_current()
@@ -57,7 +57,7 @@ func process_input(event: InputEvent) -> Base_State:
 		return idle_state
 	return null
 
-func process_frame(delta: float) -> Base_State:
+func process_frame(delta: float) -> BaseState:
 	if (abs(actor.velocity.x) + abs(actor.velocity.z)) > 1.5:
 		actor.animation_player.play("walk")
 	return null

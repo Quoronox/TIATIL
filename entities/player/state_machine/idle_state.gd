@@ -1,9 +1,9 @@
-extends Base_State
-class_name Idle_State
+extends BaseState
+class_name IdleState
 
 #------------------------------<states that this current state is able to access>-----------------------------------
-@export var walk_state : Base_State
-@export var crouch_state : Base_State
+@export var walk_state : BaseState
+@export var crouch_state : BaseState
 #-------------------------------------------------------------------------------------------------------------------
 
 
@@ -21,7 +21,7 @@ func exit_state():
 
 
 #------------------------------<Current state loop>-----------------------------------------------------------------
-func process_physics(delta: float) -> Base_State:
+func process_physics(delta: float) -> BaseState:
 	var target_velocity = Vector3(0,0,0)
 	var horizontal_velocity = Vector3(actor.velocity.x, 0, actor.velocity.z)
 	
@@ -37,7 +37,7 @@ func process_physics(delta: float) -> Base_State:
 	
 	return null
 
-func process_input(event: InputEvent) -> Base_State:
+func process_input(event: InputEvent) -> BaseState:
 	if Input.is_action_pressed("movment"):
 		#print("idle -> walk")
 		var tween = get_tree().create_tween()
@@ -50,7 +50,7 @@ func process_input(event: InputEvent) -> Base_State:
 		return crouch_state
 	return null
 
-func process_frame(delta: float) -> Base_State:
+func process_frame(delta: float) -> BaseState:
 	
 	return null
 #-------------------------------------------------------------------------------------------------------------------
