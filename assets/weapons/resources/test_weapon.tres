@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://dyh3p0vwnugpa"]
 
+[ext_resource type="PackedScene" uid="uid://cpm7rfmunt235" path="res://entities/weapon/projectile/base_projectile/base_projectile.tscn" id="1_8bf2t"]
 [ext_resource type="Script" uid="uid://b53ydiiykesgm" path="res://assets/weapons/scripts/weapon.gd" id="1_sjbjm"]
 [ext_resource type="PackedScene" uid="uid://bbg6qlv4u213i" path="res://assets/weapons/weapons/test_weapon/TestWeapon.tscn" id="2_788r6"]
 
@@ -7,6 +8,15 @@
 script = ExtResource("1_sjbjm")
 weapon_name = "TestWeapon"
 damage = 25.0
-max_ammo = 12
+max_ammo = 200
+fire_rate = 2.0
+is_automatic = true
+projectile_range = 20.0
+projectile_speed = 50.0
+accuracy = 50
+is_hitscan = true
 weapon_model = ExtResource("2_788r6")
+projectile_scene = ExtResource("1_8bf2t")
+pellet_count = 8
+spread_angle = 0.1
 weapon_position = Vector3(0.8, -0.4, -0.7)
