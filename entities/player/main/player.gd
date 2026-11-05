@@ -14,6 +14,9 @@ class_name Player
 
 @onready var fsm = $FiniteStateMachine as FiniteStateMachine
 @onready var wsm = $WeaponStateMachine as WeaponStateMachine
+
+@onready var weapon_controller = $Components/WeaponController as WeaponController
+
 @onready var head_y = $HeadY
 @onready var head_x = $HeadY/HeadX
 @onready var head_z = $HeadY/HeadX/HeadZ

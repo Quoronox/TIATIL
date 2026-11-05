@@ -1,6 +1,8 @@
 extends Area3D
 class_name Projectile
 
+@export var debug_mode: bool = false
+
 var velocity: Vector3
 var damage: float
 
@@ -36,7 +38,7 @@ func setup(init_velocity: Vector3, init_damage: float) -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
-	DevConsole._push_info("Projectile hit: " + str(body.name) + " at " + str(global_position))
+	if debug_mode: DevConsole._push_info("Projectile hit: " + str(body.name) + " at " + str(global_position))
 	_spawn_impact_marker(global_position)
 	queue_free()
 

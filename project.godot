@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 FpsCounter="*uid://c03wuy3xc23bo"
 SceneManager="*uid://drwd1p3t4662n"
 DevConsole="*uid://c8r5u7vu0tawa"
+UpperManager="*uid://3jqwvwsnrwe3"
 
 [display]
 

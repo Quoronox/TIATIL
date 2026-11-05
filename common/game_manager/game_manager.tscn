@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://brnbv3n23ypsg" path="res://common/game_manager/game_manager.gd" id="1_luebl"]
 [ext_resource type="PackedScene" uid="uid://b67exfa0n8r2n" path="res://enviorment/worlds/testing/world_0.tscn" id="2_risf1"]
+[ext_resource type="Script" uid="uid://cu6w4teaqd3vp" path="res://common/weapon_management/weapon_management.gd" id="3_pc0qt"]
+[ext_resource type="Script" uid="uid://dkerk5x04aeva" path="res://assets/weapons/scripts/weapon_data.gd" id="4_iago2"]
+[ext_resource type="Resource" uid="uid://byb7c4ru76enh" path="res://assets/weapons/resources/test_weapon_data.tres" id="5_j1s8i"]
+[ext_resource type="Resource" uid="uid://dnm8annlmy8ya" path="res://assets/weapons/resources/dev_weapons/shotgun/dev_shotgun_data.tres" id="6_ofld6"]
 
 [node name="GameManager" type="Node3D" unique_id=2136011106 groups=["game_manager"]]
 script = ExtResource("1_luebl")
@@ -10,3 +14,10 @@ debug_mode = true
 [node name="WorldHolder" type="Node3D" parent="." unique_id=1223666576]
 
 [node name="World_0" parent="WorldHolder" unique_id=411313354 instance=ExtResource("2_risf1")]
+
+[node name="WeaponManager" type="Node" parent="." unique_id=729078232]
+script = ExtResource("3_pc0qt")
+weapons = Dictionary[int, ExtResource("4_iago2")]({
+1: ExtResource("5_j1s8i"),
+2: ExtResource("6_ofld6")
+})

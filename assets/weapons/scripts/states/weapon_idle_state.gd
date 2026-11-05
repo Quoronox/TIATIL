@@ -27,7 +27,7 @@ func process_physics(delta: float) -> WeaponBaseState:
 		if debug_mode: DevConsole._push_error("ERROR: WIS - Could not find: weapon_contorller")
 		return null
 	
-	if weapon_controller.current_ammo <= 0:
+	if not weapon_controller.has_ammo():
 		if debug_mode: DevConsole._push_info("WIS - out of ammo")
 		return weapon_empty_state
 	return null

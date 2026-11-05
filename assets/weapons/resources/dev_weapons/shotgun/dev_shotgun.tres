@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://tc3n4gmphaxc"]
+
+[ext_resource type="PackedScene" uid="uid://cpm7rfmunt235" path="res://entities/weapon/projectile/base_projectile/base_projectile.tscn" id="1_7dbhi"]
+[ext_resource type="Script" uid="uid://b53ydiiykesgm" path="res://assets/weapons/scripts/weapon.gd" id="1_durpt"]
+[ext_resource type="PackedScene" uid="uid://bbg6qlv4u213i" path="res://assets/weapons/weapons/test_weapon/TestWeapon.tscn" id="3_bhl8x"]
+
+[resource]
+script = ExtResource("1_durpt")
+weapon_name = "dev_shotgun"
+damage = 8.0
+max_ammo = 16
+fire_rate = 1.0
+projectile_range = 35.0
+projectile_speed = 50.0
+accuracy = 80
+is_hitscan = true
+weapon_model = ExtResource("3_bhl8x")
+projectile_scene = ExtResource("1_7dbhi")
+pellet_count = 4
+spread_angle = 0.1
+metadata/_custom_type_script = "uid://b53ydiiykesgm"

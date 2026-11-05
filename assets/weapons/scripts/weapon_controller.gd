@@ -2,14 +2,21 @@ extends Node
 class_name WeaponController
 
 @export var debug_mode: bool = false
+@export var debug_mode_projectile_hits: bool = false
+
+@export var player: Player
 
 @export var camera: Camera3D
-@export var current_weapon: Weapon
 @export var weapon_model_parent: Node3D
 
+# ---------- manual access to idle state -----------
+@export var weapon_idle_state : WeaponBaseState
+# --------------------------------------------------
+
+var current_weapon: Weapon
 
 var current_weapon_model: Node3D
-var current_ammo: int
+#var current_ammo: int
 
 var can_fire_next: bool = true
 var fire_rate_timer: float = 0.0
@@ -18,7 +25,7 @@ var fire_rate_timer: float = 0.0
 func _ready() -> void:
 	if current_weapon:
 		spawn_weapon_model()
-		current_ammo = current_weapon.max_ammo
+		#current_ammo = current_weapon.max_ammo
 
 
 func _process(delta: float) -> void:
@@ -28,7 +35,7 @@ func _process(delta: float) -> void:
 			can_fire_next = true
 
 
-func spawn_weapon_model():
+func spawn_weapon_model() -> void:
 	if current_weapon_model:
 		current_weapon_model.queue_free()
 		if debug_mode: DevConsole._push_warning("WC - removed duplicate current_weapon_model")
@@ -41,12 +48,18 @@ func spawn_weapon_model():
 
 
 func can_fire() -> bool:
-	return (current_ammo > 0) and can_fire_next
+	var weapon_manager = get_tree().get_first_node_in_group("weapon_manager") as WeaponManager
+	var weapon_data = weapon_manager.weapons[weapon_manager.current_slot]
+	return (weapon_data.ammo > 0) and can_fire_next
 
 
 func fire_weapon() -> void:
+	var weapon_manager = get_tree().get_first_node_in_group("weapon_manager") as WeaponManager
+	
 	if can_fire():
-		current_ammo -= 1
+		weapon_manager.use_ammo(weapon_manager.current_slot)
+		#current_ammo = weapon_manager.get_current_ammo()
+		if debug_mode: DevConsole._push_complete("WC - Fired, Ammo: " + str(weapon_manager.get_current_ammo()))
 		
 		# start fire rate cooldown
 		can_fire_next = false
@@ -93,7 +106,7 @@ func _perform_hitscan() -> void:
 		var hitscan_result = space_state.intersect_ray(query)
 		
 		if hitscan_result:
-			if debug_mode: DevConsole._push_info("Hit: " + str(hitscan_result.collider.name) + " at " + str(hitscan_result.position))
+			if debug_mode_projectile_hits: DevConsole._push_info("Hit: " + str(hitscan_result.collider.name) + " at " + str(hitscan_result.position))
 			_spawn_impact_marker(hitscan_result.position)
 
 
@@ -146,3 +159,23 @@ func _spawn_projectile() -> void:
 	
 	# setup projectile
 	projectile.setup(velocity, current_weapon.damage)
+
+
+func switch_weapon(weapon_data: WeaponData) -> void:
+	current_weapon = weapon_data.weapon
+	
+	if current_weapon_model:
+		current_weapon_model.queue_free()
+	
+	spawn_weapon_model()
+	
+	# switch back to idle (avoid getting stuck in empty_state)
+	player.wsm.change_state(weapon_idle_state)
+	
+	if debug_mode: DevConsole._push_text("WC - Enable Weapon" + str(current_weapon.weapon_name))
+
+
+func has_ammo() -> bool:
+	var weapon_manager = get_tree().get_first_node_in_group("weapon_manager") as WeaponManager
+	var weapon_data = weapon_manager.weapons[weapon_manager.current_slot]
+	return (weapon_data.ammo > 0)

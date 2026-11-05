@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://caglnbosdwq6x" path="res://common/trauma_causer/trauma_causer.tscn" id="9_faoxc"]
 [ext_resource type="Shader" uid="uid://l2yjroqxk71s" path="res://rendering/shaders/distortion_main.gdshader" id="9_jrvxk"]
 [ext_resource type="Script" uid="uid://da0ao81j4pygw" path="res://assets/weapons/scripts/weapon_controller.gd" id="11_jrvxk"]
-[ext_resource type="Resource" uid="uid://dyh3p0vwnugpa" path="res://assets/weapons/resources/test_weapon.tres" id="12_8ks1a"]
 [ext_resource type="Script" uid="uid://wow5yp826gcn" path="res://assets/weapons/scripts/weapon_state_machine.gd" id="13_0j6l3"]
 [ext_resource type="Script" uid="uid://diig6qma8a5er" path="res://assets/weapons/scripts/states/weapon_idle_state.gd" id="14_u5jce"]
 [ext_resource type="Script" uid="uid://o20dx6g340dd" path="res://assets/weapons/scripts/states/weapon_firing_state.gd" id="15_c5baj"]
@@ -230,12 +229,13 @@ debug_color = Color(0.9678219, 0, 0.4748584, 0.41960785)
 
 [node name="Components" type="Node" parent="." unique_id=1225588390]
 
-[node name="WeaponController" type="Node" parent="Components" unique_id=1402504144 node_paths=PackedStringArray("camera", "weapon_model_parent")]
+[node name="WeaponController" type="Node" parent="Components" unique_id=1402504144 node_paths=PackedStringArray("player", "camera", "weapon_model_parent", "weapon_idle_state")]
 script = ExtResource("11_jrvxk")
 debug_mode = true
+player = NodePath("../..")
 camera = NodePath("../../HeadY/HeadX/HeadZ/DynamicCamera")
-current_weapon = ExtResource("12_8ks1a")
 weapon_model_parent = NodePath("../../HeadY/HeadX/HeadZ/DynamicCamera")
+weapon_idle_state = NodePath("../../WeaponStateMachine/WeaponIdleState")
 
 [node name="WeaponStateMachine" type="Node" parent="." unique_id=401740831 node_paths=PackedStringArray("weapon_controller", "state")]
 script = ExtResource("13_0j6l3")
