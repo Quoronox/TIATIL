@@ -2,8 +2,8 @@ extends Node
 class_name WeaponManager
 
 @export var weapons: Dictionary[int, WeaponData] = {}
-var player: Player
 
+var player: Player
 
 var current_slot: int = 1
 
@@ -11,6 +11,8 @@ var current_slot: int = 1
 func _ready() -> void:
 	add_to_group("weapon_manager")
 	call_deferred("find_player")
+	
+	SceneManager.load_complete.connect(_refresh)
 	
 	for i in range(1, 10):
 		var action_name = "weapon_" + str(i)
@@ -21,6 +23,7 @@ func _ready() -> void:
 			InputMap.action_add_event(action_name, event)
 	
 	call_deferred("initialize_starting_weapon")
+	
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -56,3 +59,13 @@ func initialize_starting_weapon() -> void:
 
 func find_player() -> void:
 	player = get_tree().get_first_node_in_group("player")
+
+
+func _refresh(_world: Node) -> void:
+	DevConsole._push_complete("WM - _refrech")
+	
+	# Update functions
+	find_player()
+	initialize_starting_weapon()
+	
+	

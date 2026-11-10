@@ -236,6 +236,7 @@ player = NodePath("../..")
 camera = NodePath("../../HeadY/HeadX/HeadZ/DynamicCamera")
 weapon_model_parent = NodePath("../../HeadY/HeadX/HeadZ/DynamicCamera")
 weapon_idle_state = NodePath("../../WeaponStateMachine/WeaponIdleState")
+do_idle_sway = false
 
 [node name="WeaponStateMachine" type="Node" parent="." unique_id=401740831 node_paths=PackedStringArray("weapon_controller", "state")]
 script = ExtResource("13_0j6l3")

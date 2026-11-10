@@ -19,6 +19,7 @@ func _ready() -> void:
 
 
 func _on_world_loaded(world) -> void:
+	DevConsole._push_complete("hhhhhhhhhh")
 	if world is World:
 		current_world = world
 
