@@ -6,7 +6,7 @@ class_name WeaponController
 
 @export var player: Player
 
-@export var camera: Camera3D
+@export var camera: DynamicCamera
 @export var weapon_model_parent: Node3D
 
 # ---------- manual access to idle state -----------
@@ -33,6 +33,14 @@ class_name WeaponController
 @export var strafe_tilt_max: float = 0.08
 @export var strafe_tilt_stiffness: float = 60.0
 @export var strafe_tilt_damping: float = 5.0
+
+@export_group("Recoil")
+@export var do_recoil: bool = true
+@export var recoil_model_stiffness: float = 200.0
+@export var recoil_model_damping: float = 11.0
+@export var recoil_model_max: float = 0.15
+@export var recoil_pitch_max: float = 0.4
+
 
 var current_weapon: Weapon
 
@@ -61,6 +69,13 @@ var _camera_rotation_rate: Vector3 = Vector3.ZERO
 var _strafe_tilt: float = 0.0
 var _strafe_tilt_vel: float = 0.0
 
+# recoil
+var _recoil_z: float = 0.0
+var _recoil_z_vel: float = 0.0
+var _recoil_pitch: float = 0.0
+var _recoil_pitch_vel: float = 0.0
+
+var _muzzle_flash
 
 func _ready() -> void:
 	
@@ -96,6 +111,16 @@ func spawn_weapon_model() -> void:
 		# Store base pos/rot for offset calculations
 		base_weapon_position = current_weapon.weapon_position
 		base_weapon_rotation = Vector3.ZERO
+		
+		
+		var _found = current_weapon_model.find_children("*", "MuzzleFlash", true, false)
+		_muzzle_flash = _found[0] if not _found.is_empty() else null
+		if _muzzle_flash:
+			_muzzle_flash.configure(current_weapon)
+	
+	
+	
+	
 
 
 func can_fire() -> bool:
@@ -115,6 +140,15 @@ func fire_weapon() -> void:
 		# start fire rate cooldown
 		can_fire_next = false
 		fire_rate_timer = 1.0 / current_weapon.fire_rate
+		
+		# Camera recoil
+		if camera:
+			camera.add_weapon_kick(current_weapon.recoil_cam_pitch, current_weapon.recoil_cam_yaw, current_weapon.recoil_cam_roll)
+		if do_recoil:
+			_add_model_recoil()
+		
+		if _muzzle_flash:
+			_muzzle_flash.flash(current_weapon.muzzle_light_color, current_weapon.muzzle_ligt_energy, current_weapon.muzzle_ligt_durration)
 		
 		if current_weapon.is_hitscan:
 			_perform_hitscan()
@@ -148,9 +182,7 @@ func _perform_hitscan() -> void:
 			var spread_y = randf_range(-current_weapon.spread_angle, current_weapon.spread_angle)
 			direction += Vector3(spread_x, spread_y, 0) * camera.global_transform.basis
 		
-		DevConsole._push_text(str(direction))
 		var end_direction = camera_origin + direction * current_weapon.projectile_range
-		
 		
 		
 		# use query-collision_mask to select specific collision objects...
@@ -175,7 +207,7 @@ func _spawn_impact_marker(position: Vector3) -> void:
 	get_tree().current_scene.add_child(marker)
 	marker.global_position = position
 	
-	get_tree().create_timer(2.0).timeout.connect(marker.queue_free)
+	get_tree().create_timer(4.0).timeout.connect(marker.queue_free)
 	
 
 func _spawn_projectile() -> void:
@@ -329,10 +361,36 @@ func _update_strafe_tilt(delta: float) -> float:
 	return _strafe_tilt
 
 
+func _add_model_recoil() -> void:
+	_recoil_z += current_weapon.recoil_model_kickback
+	_recoil_pitch += deg_to_rad(current_weapon.recoil_model_rise)
+
+
+func _update_recoil(delta: float) -> Vector3:
+	# Kickback
+	var rz = SpringUtility.apply(_recoil_z, _recoil_z_vel, 0.0, recoil_model_stiffness, recoil_model_damping, delta)
+	_recoil_z = clamp(rz.x, -recoil_model_max, recoil_model_max)
+	_recoil_z_vel = rz.y
+	
+	# Muzzle rise
+	var rp = SpringUtility.apply(_recoil_pitch, _recoil_pitch_vel, 0.0, recoil_model_stiffness, recoil_model_damping, delta)
+	_recoil_pitch = clamp(rp.x, -recoil_pitch_max, recoil_pitch_max)
+	_recoil_pitch_vel = rp.y
+	
+	return Vector3(0.0, 0.0, _recoil_z)
+
+
 func apply_offsets(delta: float) -> void:
 	var idle_offset = _update_idle_sway(delta) if do_idle_sway else Vector3.ZERO
 	var look_offset = _update_look_sway(delta) if do_look_sway else Vector3.ZERO
+	
 	var strafe_tilt = Vector3(0.0, 0.0, _update_strafe_tilt(delta))
 	
-	current_weapon_model.position = base_weapon_position + idle_offset + look_offset
-	current_weapon_model.rotation = base_weapon_rotation + strafe_tilt
+	var recoil_position = Vector3.ZERO
+	var recoil_pitch = 0.0
+	if do_recoil:
+		recoil_position = _update_recoil(delta)
+		recoil_pitch = _recoil_pitch
+	
+	current_weapon_model.position = base_weapon_position + idle_offset + look_offset + recoil_position
+	current_weapon_model.rotation = base_weapon_rotation + strafe_tilt + Vector3(recoil_pitch, 0.0, 0.0)

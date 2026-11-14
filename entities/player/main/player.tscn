@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://diig6qma8a5er" path="res://assets/weapons/scripts/states/weapon_idle_state.gd" id="14_u5jce"]
 [ext_resource type="Script" uid="uid://o20dx6g340dd" path="res://assets/weapons/scripts/states/weapon_firing_state.gd" id="15_c5baj"]
 [ext_resource type="Script" uid="uid://cagi5guedg3c" path="res://assets/weapons/scripts/states/weapon_empty_state.gd" id="16_7ddvc"]
+[ext_resource type="PackedScene" uid="uid://5gchuslnbuox" path="res://entities/player/interaction_component/interaction_controller.tscn" id="17_c5baj"]
 [ext_resource type="Script" uid="uid://cy6bvhe2spwew" path="res://assets/weapons/scripts/weapon_state.gd" id="17_u5jce"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_d6hny"]
@@ -45,6 +46,10 @@ shader_parameter/grain_strength = 0.2
 shader_parameter/tint_color = Vector3(0.95, 1.03, 0.9)
 shader_parameter/tint_strength = 0.15
 shader_parameter/viewport_size_override = Vector2(0, 0)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d6hny"]
+radius = 0.1
+height = 4.0
 
 [sub_resource type="Animation" id="Animation_8p2dg"]
 length = 0.001
@@ -217,6 +222,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="InteractionRay" type="ShapeCast3D" parent="HeadY/HeadX/HeadZ/DynamicCamera" unique_id=1674334484]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_d6hny")
+target_position = Vector3(0, -2, 0)
+
+[node name="Marker3D" type="Marker3D" parent="HeadY/HeadX/HeadZ/DynamicCamera" unique_id=983601150]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5)
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2018630002]
 libraries/ = SubResource("AnimationLibrary_pn2pq")
 
@@ -237,6 +250,8 @@ camera = NodePath("../../HeadY/HeadX/HeadZ/DynamicCamera")
 weapon_model_parent = NodePath("../../HeadY/HeadX/HeadZ/DynamicCamera")
 weapon_idle_state = NodePath("../../WeaponStateMachine/WeaponIdleState")
 do_idle_sway = false
+
+[node name="InteractionController" parent="Components" unique_id=1556416570 instance=ExtResource("17_c5baj")]
 
 [node name="WeaponStateMachine" type="Node" parent="." unique_id=401740831 node_paths=PackedStringArray("weapon_controller", "state")]
 script = ExtResource("13_0j6l3")
